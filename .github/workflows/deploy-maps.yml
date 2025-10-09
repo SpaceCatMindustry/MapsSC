@@ -1,0 +1,54 @@
+name: 🗺️ Deploy Maps to Servers
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'AI/**'
+      - 'NoTurret/**' 
+      - 'Surv/**'
+      - 'TexLobby/**'
+      - 'ZeroHit/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          - { repo: 'AI', server: '/root/mindAI/config/maps' }
+          - { repo: 'NoTurret', server: '/root/mindNotTurret/config/maps' }
+          - { repo: 'Surv', server: '/root/mindSurv/config/maps' }
+          - { repo: 'TexLobby', server: '/root/mindTexLobby/config/maps' }
+          - { repo: 'ZeroHit', server: '/root/mindZeroHit/config/maps' }
+    
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: 📂 Copy ${{ matrix.config.repo }} maps
+      uses: appleboy/scp-action@v0.1.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "${{ matrix.config.repo }}/*"
+        target: "${{ matrix.config.server }}"
+        strip_components: 1
+        overwrite: true
+
+  run-script:
+    runs-on: ubuntu-latest
+    needs: deploy  # Ждем завершения копирования
+    steps:
+    - name: 🚀 Execute run.sh
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          echo "Запускаем скрипт управления серверами..."
+          cd /root
+          chmod +x run.sh
+          ./run.sh
+          echo "✅ run.sh выполнен успешно"v
