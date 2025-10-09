@@ -30,7 +30,7 @@ jobs:
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        password: ${{ secrets.SERVER_PASSWORD }}
         source: "${{ matrix.config.repo }}/*"
         target: "${{ matrix.config.server }}"
         strip_components: 1
@@ -45,10 +45,10 @@ jobs:
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           echo "Запускаем скрипт управления серверами..."
           cd /root
           chmod +x run.sh
           ./run.sh
-          echo "✅ run.sh выполнен успешно"v
+          echo "✅ run.sh выполнен успешно"
