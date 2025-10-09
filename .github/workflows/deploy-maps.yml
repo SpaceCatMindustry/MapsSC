@@ -19,7 +19,7 @@ jobs:
           - { repo: 'AI', server: '/root/mindAI/config/maps' }
           - { repo: 'NoTurret', server: '/root/mindNotTurret/config/maps' }
           - { repo: 'Surv', server: '/root/mindSurv/config/maps' }
-          - { repo: 'TexLobby', server: '/root/mindTexLobby/config/maps' }
+          - { repo: 'TexLobby', server: '/root/TexLobby/config/maps' }
           - { repo: 'ZeroHit', server: '/root/mindZeroHit/config/maps' }
     
     steps:
